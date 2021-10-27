@@ -28,6 +28,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 6px;
   padding: 10px 24px;
   font-size: 14px ;
   font-weight: 700;
@@ -60,7 +61,7 @@ export default {
 }
 
 .btn-orange {
-  $orangeBgColor: rgb(253, 166, 93);
+  $orangeBgColor: rgb(255, 165, 0);
   $orangeTextColor: rgb(255,255,255);
   background: $orangeBgColor;
   color: $orangeTextColor;

@@ -3,7 +3,7 @@ import tokens from '@/services/tokens';
 
 export default class Track {
   // eslint-disable-next-line consistent-return
-  static async getTrackById(trackId, userRole) {
+  static async getTrackByIdApi(trackId, userRole) {
     const headers = {};
 
     if (userRole === 'teacher') {
@@ -15,7 +15,7 @@ export default class Track {
     }
 
     try {
-      const response = await serviceApi.get('rosatom', `track/${trackId}`);
+      const response = await serviceApi.get('rosatom', `track/${trackId}`, headers);
       return response;
     } catch (error) {
       console.log(error);

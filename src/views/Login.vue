@@ -2,8 +2,8 @@
   <div class="container">
     <h2 class="login-title">Зайти как :</h2>
     <div class="login-choice">
-      <Button @click="loginStudent" :btn-orange="true">Учитель</Button>
-      <Button @click="loginTeacher">Ученик</Button>
+      <Button @click="login('teacher')" :btn-orange="true">Учитель</Button>
+      <Button @click="login('student')" >Ученик</Button>
     </div>
   </div>
 
@@ -18,19 +18,18 @@ export default {
   components: {
     Button,
   },
+  mounted() {
+    this.clearTracks();
+    this.clearUserRole();
+    this.clearToken();
+  },
 
   methods: {
-    ...mapActions(['changeUserRole', 'changeToken']),
+    ...mapActions(['changeUserRole', 'changeToken', 'clearTracks', 'clearUserRole', 'clearToken']),
 
-    loginStudent() {
-      this.changeUserRole('student');
-      this.changeToken('student');
-      this.redirect();
-    },
-
-    loginTeacher() {
-      this.changeUserRole('teacher');
-      this.changeToken('teacher');
+    login(role) {
+      this.changeUserRole(role);
+      this.changeToken(role);
       this.redirect();
     },
 

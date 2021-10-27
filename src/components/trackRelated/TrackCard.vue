@@ -59,10 +59,7 @@ export default {
     imgUrl: {
       type: String,
     },
-    isMaster: {
-      type: Boolean,
-      default: false,
-    },
+
   },
   data() {
     return {
@@ -71,6 +68,11 @@ export default {
       placeholderImage: placeholderSmall,
 
     };
+  },
+  computed: {
+    isMaster() {
+      return this.$store.getters.userRole === 'teacher';
+    },
   },
 };
 </script>
@@ -111,7 +113,7 @@ export default {
     }
   }
   .track-core{
-    height: 490px;
+    height: 450px;
 
     display: flex;
     flex-direction: column;

@@ -1,35 +1,38 @@
 <template>
   <div class="home container">
     <!--    <Preloader :first-load="!hasPageBeenLoaded" @loaded="loaded"></Preloader>-->
-
-    <div class="page-choice">
-      <Button
-        @click="showAll = false" :active="!showAll"
-        class="myTracks-btn">
-        <i class='fas fa-location-arrow'></i> Мои треки
-      </Button>
-      <Button @click="showAll = true" :active="showAll" class="catalog-btn">
-        Каталог
-      </Button>
-      <Button v-if="userRole === 'teacher'" class="create-btn"><i class="fas fa-plus"></i>
-        Создать трек
-      </Button>
+    <div v-if="tracks">
+      <div class="page-choice">
+        <Button
+          @click="showAll = false" :active="!showAll"
+          class="myTracks-btn">
+          <i class='fas fa-location-arrow'></i> Мои треки
+        </Button>
+        <Button @click="showAll = true" :active="showAll" class="catalog-btn">
+          Каталог
+        </Button>
+        <Button
+          v-if="userRole === 'teacher'"
+          :btn-orange="true" class="create-btn">
+          <i class="fas fa-plus"></i> Создать трек
+        </Button>
+      </div>
+      <div class="tracks-cnt">
+        <TrackCard
+          v-for="track in showAll ? tracks : assignedTracks"
+          :key="track.id"
+          :show-all="showAll"
+          :status="track.status"
+          :dateFinish="track.data.dateTimeFinish"
+          :id="track.id"
+          :name="track.data.name"
+          :description="track.data.previewText"
+          :imgUrl="track.data.previewPicture"
+          class="card"
+        />
+      </div>
     </div>
-    <div class="tracks-cnt" v-if="tracks">
-      <TrackCard
-        v-for="track in showAll ? tracks : assignedTracks"
-        :is-master="this.userRole === 'teacher'"
-        :key="track.id"
-        :show-all="showAll"
-        :status="track.status"
-        :dateFinish="track.data.dateTimeFinish"
-        :id="track.id"
-        :name="track.data.name"
-        :description="track.data.previewText"
-        :imgUrl="track.data.previewPicture"
-        class="card"
-      />
-    </div>
+    <p v-else class="no-tracks">There are no tracks yet</p>
   </div>
 </template>
 
@@ -64,11 +67,11 @@ export default {
   },
 
   computed: {
-    ...mapState({ tracks: 'tracks', userRole: 'userRole', token: 'token' }),
-
-    // hasPageBeenLoaded() {
-    //   return sessionStorage.getItem('tracksLoaded');
-    // },
+    ...mapState({
+      tracks: 'tracks',
+      userRole: 'userRole',
+      token: 'token',
+    }),
 
     actualTracks() {
       // ВКЛЮЧИМ,КОГДА ПОЧИНЯТ ДАТЫ
@@ -109,18 +112,14 @@ export default {
   }
 
   .myTracks-btn {
-    gap: 6px;
 
     i {
       font-size: 16px;
     }
   }
 
-  .create-btn{
+  .create-btn {
     margin-left: auto;
-    background: #ffa34f;
-    color: #ffffff;
-    gap: 6px;
 
     border: unset;
 

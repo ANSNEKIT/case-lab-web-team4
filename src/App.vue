@@ -5,6 +5,7 @@
      | <router-link to="/catalog">Каталог</router-link> |-->
     <!--      <router-link to="/tracks">Треки</router-link>-->
     <!--    </div>-->
+    <router-link to='/login'> Сменить роль </router-link>
     <router-view />
   </div>
 </template>
