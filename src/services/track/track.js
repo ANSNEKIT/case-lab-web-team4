@@ -45,9 +45,26 @@ export default class Track {
     if (userRole === 'teacher') {
       headers.headers = { 'X-API-KEY': tokens.teacher };
     }
-
     try {
-      const response = await serviceApi.put('rosatom', `track/${trackId}`, track, headers);
+      const response = await serviceApi.put('rosatom', `track/${trackId}/`, track, headers);
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  // eslint-disable-next-line consistent-return
+  static async uploadImage(trackId, image, userRole) {
+    const headers = {
+    };
+
+    if (userRole === 'teacher') {
+      headers.headers = { 'X-API-KEY': tokens.teacher, 'Content-Type': 'multipart/form-data' };
+    }
+    debugger;
+    try {
+      // eslint-disable-next-line no-useless-concat
+      const response = await serviceApi.post('rosatom' + `/track/${trackId}/data/track/images/preview/image`, image, headers);
       return response;
     } catch (error) {
       console.log(error);

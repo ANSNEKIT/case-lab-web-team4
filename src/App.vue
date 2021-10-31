@@ -35,7 +35,9 @@ export default {
 
 <style lang="scss">
 @import "assets/zero.css";
+
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,300;0,400;0,500;0,700;0,800;1,400&family=Roboto:wght@300;400;700;900&display=swap");
+
 #app {
   font-family: "Montserrat", sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -50,6 +52,7 @@ export default {
   left: 0;
   background: linear-gradient(to bottom, #bc9cff, #8ba4f9);
   height: 100%;
+  z-index: 999;
 
   a {
     font-weight: bold;
@@ -95,6 +98,9 @@ export default {
   max-width: 1140px;
   margin: 0 auto;
   padding: 10px 12px;
+  @media (max-width: 1270px) {
+    padding-left: 74px;
+  }
 }
 
 .btn-changeRole {

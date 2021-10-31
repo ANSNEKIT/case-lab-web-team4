@@ -1,38 +1,42 @@
 <template>
   <div class="card">
-    <p class="completed-sticker sticker" v-if="!showAll && status === ''">
+    <p class="completed-sticker sticker" v-if="!showAll && track.status === ''">
       <!-- // ИЛИ dateFinish < new Date() */ -->
       Завершен <i class="far fa-check-circle"></i>
     </p>
     <div class="track-core">
       <img class="track-img"
-           :src="imgUrl ? baseUrl + imgUrl : placeholderImage "
+           :src="previewPicture"
            alt="small placeholder. TO BE DONE"
       />
 
       <div class="track-main">
         <div class="track-info">
-          <router-link :to="'/track/' + id" tag="h2" class="track-name"
-          >{{ name || "Скоро здесь будет название" }}
+          <router-link :to="'/track/' + track.id" tag="h2" class="track-name"
+          >{{ trackD.name || "Скоро здесь будет название" }}
           </router-link>
           <p class="track-description">
-            {{ description || "Скоро здесь будет описание" }}
+            {{ trackD.previewText || "Скоро здесь будет описание" }}
           </p>
         </div>
-        <router-link class="open-track" :to="'/track/' + id">
+        <router-link class="open-track" :to="'/track/' + track.id">
           <i class="fas fa-arrow-right"></i
           ></router-link>
       </div>
+      <EditTrackModal :track="track" v-if="isModalOpen"></EditTrackModal>
+
     </div>
-    <p v-if="isMaster" class="change-track-sticker sticker">
+    <p v-if="isMaster" @click="modalOpen" class="change-track-sticker sticker">
       Изменить <i class="fas fa-pencil"></i>
     </p>
+    <slot></slot>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
 import placeholderSmall from '../../../public/placeholderSmall.png';
+import EditTrackModal from '@/components/modals/EditTrack.modal.vue';
 
 export default {
   name: 'TrackCard',
@@ -41,25 +45,13 @@ export default {
       type: Boolean,
       required: true,
     },
-    status: {
-      type: String,
-    },
-    dateFinish: {
-      type: Number,
-    },
-    id: {
-      type: Number,
+    track: {
+      type: Object,
       required: true,
     },
-    name: {
-      type: String,
-    },
-    description: {
-      type: String,
-    },
-    imgUrl: {
-      type: String,
-    },
+  },
+  components: {
+    EditTrackModal,
 
   },
   data() {
@@ -68,6 +60,7 @@ export default {
 
       placeholderImage: placeholderSmall,
 
+      isModalOpen: false,
     };
   },
   computed: {
@@ -77,6 +70,23 @@ export default {
     isMaster() {
       return this.getUserRole === 'teacher';
     },
+
+    trackD() {
+      return this.track.data;
+    },
+    previewPicture() {
+      if (this.track.data.previewPicture) {
+        return `${this.baseUrl}${this.track.data.previewPicture}`;
+      }
+      return this.placeholderBig;
+    },
+
+  },
+  methods: {
+    modalOpen() {
+      this.$emit('modalOpen');
+    },
+
   },
 };
 </script>

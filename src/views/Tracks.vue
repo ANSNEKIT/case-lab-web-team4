@@ -22,14 +22,14 @@
           v-for="track in showAll ? tracks : assignedTracks"
           :key="track.id"
           :show-all="showAll"
-          :status="track.status"
-          :dateFinish="track.data.dateTimeFinish"
-          :id="track.id"
-          :name="track.data.name"
-          :description="track.data.previewText"
-          :imgUrl="track.data.previewPicture"
+          :track="track"
           class="card"
+          @modalOpen="modalOpen(track)"
         />
+        <EditTrackModal
+          v-if="isModalOpen"
+          @modalClose="modalClose"
+          :track="trackToShow"></EditTrackModal>
       </div>
     </div>
     <p v-else class="no-tracks">There are no tracks yet</p>
@@ -39,7 +39,8 @@
 <script>
 import { mapState, mapActions } from 'vuex';
 import gsap from 'gsap';
-// import Track from '@/services/track/track';
+import EditTrackModal from '@/components/modals/EditTrack.modal.vue';
+
 import TrackCard from '@/components/trackRelated/TrackCard.vue';
 import Button from '@/components/Button.vue';
 // import Preloader from '../components/Preloader';
@@ -48,13 +49,15 @@ export default {
   components: {
     TrackCard,
     Button,
+    EditTrackModal,
     // Preloader,
   },
 
   data() {
     return {
-      baseUrl: 'https://tml9.rosatom.ru',
       showAll: true,
+      isModalOpen: false,
+      trackToShow: '',
     };
   },
 
@@ -66,11 +69,12 @@ export default {
   },
 
   computed: {
-    ...mapState({
-      tracks: 'tracks',
-      userRole: 'userRole',
-      token: 'token',
-    }),
+    ...mapState([
+      'tracks',
+      'userRole',
+      'token',
+      'baseUrl',
+    ]),
 
     actualTracks() {
       // ВКЛЮЧИМ,КОГДА ПОЧИНЯТ ДАТЫ
@@ -81,7 +85,7 @@ export default {
 
     assignedTracks() {
       // ПОКА ДАННАЯ ФУНКЦИЯ НИЧЕГО НЕ ДЕЛАЕТ, ТК НЕТ ПОДХОДЯЩИХ ТРЕКОВ
-      // return [...this.tracks].filter(i => i.assigned === false)
+      // return [...this.tracks].filter(i => i.assigned === true)
       return this.tracks;
     },
 
@@ -94,7 +98,14 @@ export default {
     // getTrack() {
     //   Track.getTrackById(34, 'teacher');
     // },
-    loaded() {
+    modalOpen(trackToShow) {
+      document.body.style.overflow = 'hidden';
+      this.trackToShow = trackToShow;
+      this.isModalOpen = true;
+    },
+
+    modalClose() {
+      this.isModalOpen = false;
     },
 
   },
@@ -111,17 +122,23 @@ export default {
     justify-content: start;
     gap: 20px;
   }
-
-  .myTracks-btn {
-    i {
-      font-size: 16px;
-    }
+  @media (max-width: 550px) {
+    display: grid;
   }
+}
 
-  .create-btn {
+.myTracks-btn {
+  border: 1px solid ;
+  i {
+    font-size: 16px;
+  }
+}
+
+.create-btn {
+
+  border: unset;
+  @media (min-width: 550px) {
     margin-left: auto;
-
-    border: unset;
 
   }
 }

@@ -33,7 +33,6 @@ export default {
   font-size: 14px ;
   font-weight: 700;
   border-radius: 22px;
-  border: 1px solid #1f2041;
   cursor: pointer;
   transition: 0.4s;
   background: #ffffff;

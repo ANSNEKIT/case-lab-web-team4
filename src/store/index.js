@@ -7,6 +7,7 @@ export default createStore({
     userRole: JSON.parse(sessionStorage.getItem('userRole')) || null,
     token: JSON.parse(sessionStorage.getItem('token')) || null,
     tracks: JSON.parse(sessionStorage.getItem('tracks')) || '',
+    baseUrl: 'https://tml9.rosatom.ru/',
   },
   getters: {
     getUserRole: (state) => state.userRole,
@@ -35,6 +36,20 @@ export default createStore({
         sessionStorage.setItem('tracks', JSON.stringify(state.tracks));
       } else sessionStorage.removeItem('tracks');
     },
+
+    redactTrack(state, data) {
+      const tracks = state.tracks.concat();
+      const idx = tracks.findIndex((t) => t.id === data.id);
+
+      const track = tracks[idx];
+
+      track.data = {
+        ...track.data, ...data,
+      };
+
+      state.tracks = tracks;
+      sessionStorage.setItem('tracks', JSON.stringify(state.tracks));
+    },
   },
   actions: {
     changeUserRole({ commit }, role) {
@@ -54,10 +69,14 @@ export default createStore({
       if (this.state.userRole !== 'teacher') {
         response.data = response.data.filter((i) => i.data.published === true);
       }
-      console.log(response);
       if (response.data && response.data.length) {
         commit('changeTracks', [...response.data]);
       }
+    },
+
+    redactTrack({ commit }, data) {
+      console.log(data);
+      commit('redactTrack', data);
     },
 
     clearTracks({ commit }) {
