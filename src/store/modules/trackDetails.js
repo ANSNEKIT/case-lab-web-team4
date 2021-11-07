@@ -1,8 +1,9 @@
 /* eslint no-shadow:  0 */ // --> OFF
 import TrackDetail from '@/services/track/trackDetail';
+import { setItem, getItem } from '@/helpers/localStorageHelper';
 
 const state = {
-  details: [], // Массив. Содержит айди трека и объект с деталями
+  details: getItem('details') || [], // Массив. Содержит айди трека и объект с деталями
 };
 
 const getters = {
@@ -12,6 +13,7 @@ const getters = {
 const mutations = {
   addTrackDetails(state, payload) {
     state.details.push(payload);
+    setItem('details', state.details);
   },
 };
 
